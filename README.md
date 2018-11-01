@@ -35,4 +35,4 @@ TINYPNG_KEY=$YOUR_API_KEY composer test-integration
 
 ## License
 
-This software is licensed under the MIT License. [View the license](LICENSE).
+This software is licensed under the BSD-3-Clause License. [View the license](LICENSE.md).
