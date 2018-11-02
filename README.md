@@ -2,11 +2,12 @@
 
 # TinyPNG API client for PHP
 
-PHP client for the TinyPNG API, Read more at [official documentation](https://tinypng.com/developers/reference).
+PHP client for the TinyPNG API, Read more at [official TinyPNG documentation](https://tinypng.com/developers/reference).
 
-## Documentation
+* [Documentation](https://robopuff.github.io/tinypng/)
+* [Issues](https://github.com/robopuff/tinypng/issues)
 
-... to add
+To generate docs use [MKDocs](https://www.mkdocs.org/)
 
 ## Installation
 
@@ -35,4 +36,4 @@ TINYPNG_KEY=$YOUR_API_KEY composer test-integration
 
 ## License
 
-This software is licensed under the BSD-3-Clause License. [View the license](LICENSE.md).
+This software is licensed under the BSD-3-Clause License. [View the license](LICENSE).

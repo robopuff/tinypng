@@ -1,0 +1,12 @@
+site_name: Modern TinyPNG API for PHP
+docs_dir: docs/book
+site_dir: docs/html
+pages:
+- Home: index.md
+- Usage: usage.md
+extra_css:
+  - https://robopuff.com/mkdocs.css
+site_description: 'A modern TinyPNG API client for PHP'
+repo_name: GitHub
+repo_url: 'https://github.com/robopuff/tinypng'
+theme: readthedocs
