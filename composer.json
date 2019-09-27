@@ -17,7 +17,7 @@
     "guzzlehttp/guzzle": "^6.3"
   },
   "require-dev": {
-    "paragonie/certainty": "^2.2",
+    "paragonie/certainty": "^2.5",
     "phan/phan": "^1.1",
     "phpstan/phpstan": "^0.10.5",
     "phpunit/php-code-coverage": "^6.1",
