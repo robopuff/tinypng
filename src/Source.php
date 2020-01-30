@@ -1,5 +1,12 @@
 <?php
 
+/**
+ * @see https://github.com/robopuff/tinypng for the canonical source repository
+ * @license https://github.com/robopuff/tinypng/blob/master/LICENSE New BSD-3 License
+ */
+
+declare(strict_types=1);
+
 namespace TinyPng;
 
 use Psr\Http\Message\ResponseInterface;
@@ -14,7 +21,7 @@ class Source
     private $client;
 
     /**
-     * @var array
+     * @var array<string, array>
      */
     private $commands = [];
 
@@ -95,7 +102,7 @@ class Source
      * By letting the API handle resizing you avoid having to write
      * such code yourself and you will only have to upload your image once.
      * The resized images will be optimally compressed with a nice and crisp appearance.
-     * @param array $arguments [
+     * @param array<string, mixed> $arguments [
      *     'method' => 'fit',  // (string) [scale, fit, cover, thumb]
      *     'width'  => 0,  // (int)
      *     'height' => 0 // (int)
@@ -113,7 +120,7 @@ class Source
      * You can tell the TinyPNG API to save compressed images directly to Amazon S3.
      * If you use S3 to host your images this saves you
      * the hassle of downloading images to your server and uploading them to S3 yourself.
-     * @param array $arguments [
+     * @param array<string, mixed> $arguments [
      *     'aws_access_key_id' => ''. // (string),
      *     'aws_secret_access_key' => '', // (string)
      *     'region' => '', // (string) an AWS region

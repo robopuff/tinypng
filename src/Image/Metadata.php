@@ -1,17 +1,24 @@
 <?php
 
+/**
+ * @see https://github.com/robopuff/tinypng for the canonical source repository
+ * @license https://github.com/robopuff/tinypng/blob/master/LICENSE New BSD-3 License
+ */
+
+declare(strict_types=1);
+
 namespace TinyPng\Image;
 
 class Metadata
 {
     /**
-     * @var array
+     * @var array<string, mixed>
      */
     private $metadata;
 
     /**
      * ImageMeta constructor.
-     * @param array $metadata
+     * @param array<string, mixed> $metadata
      */
     public function __construct(array $metadata = [])
     {

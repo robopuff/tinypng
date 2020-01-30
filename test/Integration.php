@@ -12,14 +12,14 @@ class Integration extends TestCase
     /**
      * @var TinyPng
      */
-    static public $tiny;
+    public static $tiny;
 
     /**
      * @var Source
      */
-    static public $optimized;
+    public static $optimized;
 
-    public static function setUpBeforeClass()
+    public static function setUpBeforeClass(): void
     {
         self::$tiny = new TinyPng(getenv('TINYPNG_KEY'), new GuzzleClient());
         self::$tiny->validate();

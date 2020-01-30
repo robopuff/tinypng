@@ -16,7 +16,7 @@ class GuzzleClientTest extends TestCase
      */
     public $guzzle;
 
-    public function setUp()
+    public function setUp(): void
     {
         $this->guzzle = $this->prophesize(Client::class);
     }
