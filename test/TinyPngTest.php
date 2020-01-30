@@ -16,7 +16,7 @@ class TinyPngTest extends TestCase
      */
     public $client;
 
-    public function setUp()
+    public function setUp(): void
     {
         $this->client = new TestAssets\MockClient();
     }

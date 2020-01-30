@@ -8,7 +8,6 @@ use Psr\Http\Message\ResponseInterface;
 use Psr\Http\Message\StreamInterface;
 use TinyPng\Exception\InvalidResponseException;
 use TinyPng\Exception\ResponseErrorException;
-use TinyPng\Image;
 use TinyPng\Source;
 use TinyPngTest\TestAssets\MockClient;
 
@@ -24,7 +23,7 @@ class SourceTest extends TestCase
      */
     public $client;
 
-    public function setUp()
+    public function setUp(): void
     {
         $this->client = new TestAssets\MockClient();
         $this->dummyFile = __DIR__ . '/TestAssets/dummy.png';
