@@ -18,7 +18,7 @@
     "ocramius/package-versions": "^1.5"
   },
   "require-dev": {
-    "paragonie/certainty": "^2.2",
+    "paragonie/certainty": "^2.6",
     "phan/phan": "^2.4",
     "phpstan/phpstan": "^0.12",
     "phpunit/php-code-coverage": "^7.0",
