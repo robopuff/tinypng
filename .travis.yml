@@ -13,27 +13,12 @@ env:
 
 matrix:
   include:
-  - php: 7.2
-    env:
-    - DEPS=lowest
-  - php: 7.2
-    env:
-    - DEPS=locked
-  - php: 7.2
-    env:
-    - DEPS=latest
-  - php: 7.3
-    env:
-    - DEPS=lowest
   - php: 7.3
     env:
     - DEPS=locked
   - php: 7.3
     env:
     - DEPS=latest
-  - php: 7.4
-    env:
-    - DEPS=lowest
   - php: 7.4
     env:
     - DEPS=locked
@@ -48,7 +33,6 @@ install:
 - travis_retry composer install $COMPOSER_ARGS --ignore-platform-reqs
 - if [[ $LEGACY_DEPS != '' ]]; then travis_retry composer update $COMPOSER_ARGS --with-dependencies $LEGACY_DEPS ; fi
 - if [[ $DEPS == 'latest' ]]; then travis_retry composer update $COMPOSER_ARGS ; fi
-- if [[ $DEPS == 'lowest' ]]; then travis_retry composer update --prefer-lowest --prefer-stable $COMPOSER_ARGS ; fi
 - if [[ $TEST_COVERAGE == 'true' ]]; then travis_retry composer require --dev $COMPOSER_ARGS $COVERAGE_DEPS ; fi
 - stty cols 120 && composer show
 
