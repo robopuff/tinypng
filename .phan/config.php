@@ -40,7 +40,7 @@ return [
     // then Phan assumes the PHP version which is closest to the minor version
     // of the php executable used to execute phan.
     // Automatically inferred from composer.json requirement for "php" of "^7.1"
-    'target_php_version' => '7.1',
+    'target_php_version' => '7.2',
 
     // If enabled, missing properties will be created when
     // they are first seen. If false, we'll report an
@@ -289,9 +289,6 @@ return [
         'vendor/guzzlehttp/guzzle/src',
         'vendor/paragonie/certainty/src',
         'vendor/phan/phan/src/Phan',
-        'vendor/phpstan/phpstan/src',
-        'vendor/phpunit/php-code-coverage/src',
-        'vendor/phpunit/phpunit/src',
         'vendor/psr/cache/src',
         'vendor/psr/http-message/src',
         'vendor/psr/log/Psr/Log',

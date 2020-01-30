@@ -26,7 +26,7 @@ class ImageTest extends TestCase
      */
     public $streamContent;
 
-    public function setUp()
+    public function setUp(): void
     {
         $this->streamContent = random_bytes(128);
 
