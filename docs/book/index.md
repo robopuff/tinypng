@@ -9,8 +9,10 @@ $ composer require robopuff/tinypng
 ## Basic usage
 
 ```php
-$tinyPng = new \TinyPng\TinyPng('your_api_key');
-$tinyPng->fromFile('unoptimized_image.png')->toFile('optimized_image.png');
+$tinyPng = new \TinyPng\TinyPng(new \TinyPng\Client\GuzzleClient('your_api_key'));
+$tinyPng
+    ->optimize(new \TinyPng\Input\Filesystem('unoptimized_image.png'))
+    ->store(new \TinyPng\Output\Storage\Filesystem('optimized_image.png'));
 ```
 
 ## License
