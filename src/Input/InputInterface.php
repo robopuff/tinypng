@@ -7,8 +7,14 @@ declare(strict_types=1);
  * @license https://github.com/robopuff/tinypng/blob/master/LICENSE New BSD-3 License
  */
 
-namespace TinyPng;
+namespace TinyPng\Input;
 
-class Exception extends \Exception
+use Psr\Http\Message\StreamInterface;
+
+interface InputInterface
 {
+    /**
+     * @return null|string|array|resource|StreamInterface
+     */
+    public function getBuffer();
 }

@@ -40,7 +40,7 @@ return [
     // then Phan assumes the PHP version which is closest to the minor version
     // of the php executable used to execute phan.
     // Automatically inferred from composer.json requirement for "php" of "^7.1"
-    'target_php_version' => '7.2',
+    'target_php_version' => '7.4',
 
     // If enabled, missing properties will be created when
     // they are first seen. If false, we'll report an
@@ -216,7 +216,9 @@ return [
 
     // Add any issue types (such as 'PhanUndeclaredMethod')
     // to this black-list to inhibit them from being reported.
-    'suppress_issue_types' => [],
+    'suppress_issue_types' => [
+        'PhanTypeInvalidThrowsIsInterface'
+    ],
 
     // A regular expression to match files to be excluded
     // from parsing and analysis and will not be read at all.
@@ -292,7 +294,6 @@ return [
         'vendor/psr/cache/src',
         'vendor/psr/http-message/src',
         'vendor/psr/log/Psr/Log',
-        'vendor/ocramius/package-versions/src',
     ],
 
     // A list of individual files to include in analysis
