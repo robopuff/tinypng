@@ -7,8 +7,11 @@ declare(strict_types=1);
  * @license https://github.com/robopuff/tinypng/blob/master/LICENSE New BSD-3 License
  */
 
-namespace TinyPng;
+namespace TinyPng\Output\Storage;
 
-class Exception extends \Exception
+use Psr\Http\Message\ResponseInterface;
+
+interface StorageInterface
 {
+    public function store(ResponseInterface $response): void;
 }

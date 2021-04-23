@@ -1,36 +1,33 @@
 <?php
 
+declare(strict_types=1);
+
+/**
+ * @see https://github.com/robopuff/tinypng for the canonical source repository
+ * @license https://github.com/robopuff/tinypng/blob/master/LICENSE New BSD-3 License
+ */
+
 namespace TinyPngTest;
 
 use PHPUnit\Framework\TestCase;
 use TinyPng\Client\GuzzleClient;
-use TinyPng\Source;
+use TinyPng\Input\Filesystem as FilesystemInput;
+use TinyPng\Input\Guzzle;
+use TinyPng\Output\Command\Metadata;
+use TinyPng\Output\Command\Resize;
+use TinyPng\Output\Storage\Filesystem as FilesystemStorage;
 use TinyPng\TinyPng;
 
 class Integration extends TestCase
 {
-    /**
-     * @var TinyPng
-     */
-    public static $tiny;
-
-    /**
-     * @var Source
-     */
-    public static $optimized;
-
-    public static function setUpBeforeClass(): void
-    {
-        self::$tiny = new TinyPng(getenv('TINYPNG_KEY'), new GuzzleClient());
-        self::$tiny->validate();
-
-        self::$optimized = self::$tiny->fromFile(__DIR__ . '/TestAssets/voormedia.png');
-    }
 
     public function testShouldCompressFromFile()
     {
         $path = tempnam(sys_get_temp_dir(), 'tinypng-php');
-        self::$optimized->toFile($path);
+
+        $tiny = new TinyPng(new GuzzleClient(getenv('TINYPNG_KEY')));
+        $output = $tiny->optimize(new FilesystemInput(__DIR__ . '/TestAssets/voormedia.png'));
+        $output->store(new FilesystemStorage($path));
 
         $size = filesize($path);
         $contents = fread(fopen($path, 'rb'), $size);
@@ -39,17 +36,19 @@ class Integration extends TestCase
         $this->assertLessThan(1500, $size);
 
         /* width == 137 */
-        $this->assertContains("\0\0\0\x89", $contents, 'Has width == 137');
-        $this->assertNotContains('Copyright Voormedia', $contents, 'Does not contain copyright');
+        $this->assertStringContainsString("\0\0\0\x89", $contents, 'Has width == 137');
+        $this->assertStringNotContainsString('Copyright Voormedia', $contents, 'Does not contain copyright');
     }
 
     public function testShouldCompressFromUrl()
     {
         $path = tempnam(sys_get_temp_dir(), 'tinypng-php');
-        $source = self::$tiny->fromUrl(
+
+        $tiny = new TinyPng(new GuzzleClient(getenv('TINYPNG_KEY')));
+        $output = $tiny->optimize(new Guzzle(
             'https://raw.githubusercontent.com/tinify/tinify-php/master/test/examples/voormedia.png'
-        );
-        $source->toFile($path);
+        ));
+        $output->store(new FilesystemStorage($path));
 
         $size = filesize($path);
         $contents = fread(fopen($path, 'rb'), $size);
@@ -58,15 +57,18 @@ class Integration extends TestCase
         $this->assertLessThan(1500, $size);
 
         /* width == 137 */
-        $this->assertContains("\0\0\0\x89", $contents, 'Has width == 137');
-        $this->assertNotContains('Copyright Voormedia', $contents, 'Does not contain copyright');
+        $this->assertStringContainsString("\0\0\0\x89", $contents, 'Has width == 137');
+        $this->assertStringNotContainsString('Copyright Voormedia', $contents, 'Does not contain copyright');
     }
 
     public function testShouldResize()
     {
         $path = tempnam(sys_get_temp_dir(), 'tinypng-php');
-        self::$optimized->clearCommands();
-        self::$optimized->resize(['method' => 'fit', 'width' => 50, 'height' => 20])->toFile($path);
+
+        $tiny = new TinyPng(new GuzzleClient(getenv('TINYPNG_KEY')));
+        $output = $tiny->optimize(new FilesystemInput(__DIR__ . '/TestAssets/voormedia.png'));
+        $output->setCommands(new Resize(Resize::METHOD_FIT, 50, 20));
+        $output->store(new FilesystemStorage($path));
 
         $size = filesize($path);
         $contents = fread(fopen($path, 'rb'), $size);
@@ -75,15 +77,18 @@ class Integration extends TestCase
         $this->assertLessThan(1000, $size);
 
         /* width == 50 */
-        $this->assertContains("\0\0\0\x32", $contents, 'Has width == 50');
-        $this->assertNotContains('Copyright Voormedia', $contents, 'Does not contain copyright');
+        $this->assertStringContainsString("\0\0\0\x32", $contents, 'Has width == 50');
+        $this->assertStringNotContainsString('Copyright Voormedia', $contents, 'Does not contain copyright');
     }
 
     public function testShouldPreserveMetadata()
     {
         $path = tempnam(sys_get_temp_dir(), 'tinypng-php');
-        self::$optimized->clearCommands();
-        self::$optimized->preserve(['copyright', 'creation'])->toFile($path);
+
+        $tiny = new TinyPng(new GuzzleClient(getenv('TINYPNG_KEY')));
+        $output = $tiny->optimize(new FilesystemInput(__DIR__ . '/TestAssets/voormedia.png'));
+        $output->setCommands(new Metadata(Metadata::METADATA_COPYRIGHT, Metadata::METADATA_CREATION));
+        $output->store(new FilesystemStorage($path));
 
         $size = filesize($path);
         $contents = fread(fopen($path, 'rb'), $size);
@@ -92,16 +97,21 @@ class Integration extends TestCase
         $this->assertLessThan(2000, $size);
 
         /* width == 137 */
-        $this->assertContains("\0\0\0\x89", $contents, 'Has width == 137');
-        $this->assertContains('Copyright Voormedia', $contents, 'Contains copyright');
+        $this->assertStringContainsString("\0\0\0\x89", $contents, 'Has width == 137');
+        $this->assertStringContainsString('Copyright Voormedia', $contents, 'Contains copyright');
     }
 
     public function testShouldPreserveMetadataAndResize()
     {
         $path = tempnam(sys_get_temp_dir(), 'tinypng-php');
-        self::$optimized->clearCommands();
-        self::$optimized->preserve(['copyright', 'creation'])->toFile($path);
-        self::$optimized->resize(['method' => 'fit', 'width' => 50, 'height' => 20])->toFile($path);
+
+        $tiny = new TinyPng(new GuzzleClient(getenv('TINYPNG_KEY')));
+        $output = $tiny->optimize(new FilesystemInput(__DIR__ . '/TestAssets/voormedia.png'));
+        $output->setCommands(
+            new Resize(Resize::METHOD_FIT, 50, 20),
+            new Metadata(Metadata::METADATA_COPYRIGHT, Metadata::METADATA_CREATION),
+        );
+        $output->store(new FilesystemStorage($path));
 
         $size = filesize($path);
         $contents = fread(fopen($path, 'rb'), $size);
@@ -110,7 +120,7 @@ class Integration extends TestCase
         $this->assertLessThan(2000, $size);
 
         /* width == 50 */
-        $this->assertContains("\0\0\0\x32", $contents, 'Has width == 50');
-        $this->assertContains('Copyright Voormedia', $contents, 'Contains copyright');
+        $this->assertStringContainsString("\0\0\0\x32", $contents, 'Has width == 50');
+        $this->assertStringContainsString('Copyright Voormedia', $contents, 'Contains copyright');
     }
 }

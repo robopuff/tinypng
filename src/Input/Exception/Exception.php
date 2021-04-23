@@ -7,8 +7,9 @@ declare(strict_types=1);
  * @license https://github.com/robopuff/tinypng/blob/master/LICENSE New BSD-3 License
  */
 
-namespace TinyPng;
+namespace TinyPng\Input\Exception;
 
-class Exception extends \Exception
+class Exception extends \TinyPng\Exception
 {
+
 }
