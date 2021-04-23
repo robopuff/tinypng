@@ -7,14 +7,15 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   
   
+  
   <link rel="shortcut icon" href="../img/favicon.ico">
   <title>Usage - Modern TinyPNG API for PHP</title>
-  <link href='https://fonts.googleapis.com/css?family=Lato:400,700|Roboto+Slab:400,700|Inconsolata:400,700' rel='stylesheet' type='text/css'>
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Lato:400,700|Roboto+Slab:400,700|Inconsolata:400,700" />
 
-  <link rel="stylesheet" href="../css/theme.css" type="text/css" />
-  <link rel="stylesheet" href="../css/theme_extra.css" type="text/css" />
-  <link rel="stylesheet" href="//cdnjs.cloudflare.com/ajax/libs/highlight.js/9.12.0/styles/github.min.css">
-  <link href="https://robopuff.com/mkdocs.css" rel="stylesheet">
+  <link rel="stylesheet" href="../css/theme.css" />
+  <link rel="stylesheet" href="../css/theme_extra.css" />
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/9.12.0/styles/github.min.css" />
+  <link href="https://robopuff.com/mkdocs.css" rel="stylesheet" />
   
   <script>
     // Current page data
@@ -25,7 +26,7 @@
   
   <script src="../js/jquery-2.1.1.min.js" defer></script>
   <script src="../js/modernizr-2.8.3.min.js" defer></script>
-  <script src="//cdnjs.cloudflare.com/ajax/libs/highlight.js/9.12.0/highlight.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/9.12.0/highlight.min.js"></script>
   <script>hljs.initHighlightingOnLoad();</script> 
   
 </head>
@@ -36,6 +37,7 @@
 
     
     <nav data-toggle="wy-nav-shift" class="wy-nav-side stickynav">
+    <div class="wy-side-scroll">
       <div class="wy-side-nav-search">
         <a href=".." class="icon icon-home"> Modern TinyPNG API for PHP</a>
         <div role="search">
@@ -46,38 +48,32 @@
       </div>
 
       <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="main navigation">
-	<ul class="current">
-	  
-          
-            <li class="toctree-l1">
-		
-    <a class="" href="..">Home</a>
-	    </li>
-          
-            <li class="toctree-l1 current">
-		
-    <a class="current" href="./">Usage</a>
-    <ul class="subnav">
-            
-    <li class="toctree-l2"><a href="#usage">Usage</a></li>
-    
+                <ul>
+                    <li class="toctree-l1"><a class="reference internal" href="..">Home</a>
+                    </li>
+                </ul>
+                <ul class="current">
+                    <li class="toctree-l1 current"><a class="reference internal current" href="./">Usage</a>
+    <ul class="current">
+    <li class="toctree-l2"><a class="reference internal" href="#basic">Basic</a>
+    </li>
+    <li class="toctree-l2"><a class="reference internal" href="#define-a-client">Define a client</a>
+    </li>
+    <li class="toctree-l2"><a class="reference internal" href="#actions">Actions</a>
         <ul>
-        
-            <li><a class="toctree-l3" href="#basic">Basic</a></li>
-        
-            <li><a class="toctree-l3" href="#define-client">Define client</a></li>
-        
-            <li><a class="toctree-l3" href="#actions">Actions</a></li>
-        
+    <li class="toctree-l3"><a class="reference internal" href="#resize-image">Resize image</a>
+    </li>
+    <li class="toctree-l3"><a class="reference internal" href="#preserve-metadata">Preserve metadata</a>
+    </li>
+    <li class="toctree-l3"><a class="reference internal" href="#save-to-amazon-s3">Save to Amazon S3</a>
+    </li>
         </ul>
-    
-
+    </li>
     </ul>
-	    </li>
-          
-        </ul>
+                    </li>
+                </ul>
       </div>
-      &nbsp;
+    </div>
     </nav>
 
     <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
@@ -105,6 +101,7 @@
       
     </li>
   </ul>
+  
   <hr/>
 </div>
           <div role="main">
@@ -112,65 +109,61 @@
               
                 <h1 id="usage">Usage</h1>
 <h2 id="basic">Basic</h2>
-<pre><code class="php">$tinyPng = new \TinyPng\TinyPng('api_key');
+<pre><code class="language-php">$tinyPng = new \TinyPng\TinyPng(new \TinyPng\Client\GuzzleClient('your_api_key'));
 
 // Provide image path
-$source = $tinyPng-&gt;fromFile('path_to_a_file.jpg');
+$output = $tinyPng-&gt;optimize(new \TinyPng\Input\Filesystem('unoptimized_image.png'));
 
-// Provide image content
-$source = $tinyPng-&gt;fromBuffer('file_content_as_string');
+// Provide image by url
+$output = $tinyPng-&gt;optimize(new \TinyPng\Input\Guzzle('http://example.com/image.png'));
 
-// Provide image via url
-$source $tinyPng-&gt;fromUrl('http://example.com/image.png');
-
-$source-&gt;toFile('output.file.png');
+// Save image 
+$output-&gt;store(new \TinyPng\Output\Storage\Filesystem('output.file.png'));
 </code></pre>
-
-<h2 id="define-client">Define client</h2>
-<p>Currently this library supports only <code>Guzzle</code> client, but you can specify options and client itself.
-For more informations about Guzzle options, please read <a href="http://docs.guzzlephp.org/">official Guzzle documentation</a></p>
-<pre><code class="php">// You can specify GuzzleHttp client manually (no options will be applied)
+<h2 id="define-a-client">Define a client</h2>
+<p>Currently, this library supports only <code>Guzzle</code> client, but you can specify options and client itself.
+For more information about Guzzle options, please read <a href="http://docs.guzzlephp.org/">official Guzzle documentation</a></p>
+<pre><code class="language-php">// You can specify GuzzleHttp client manually (no options will be applied)
 // http://docs.guzzlephp.org/en/stable/request-options.html
-$client = new \TinyPng\Client\GuzzleClient(['guzzle' =&gt; 'options'], null); 
-
-// Client is a class that implements \TinyPng\Client\ClientInterface
-$tinyPng = new \TinyPng\TinyPng('api_key', $client);
+$client = new \TinyPng\Client\GuzzleClient('api_key', ['guzzle' =&gt; 'options'], new \GuzzleHttp\Client());
 </code></pre>
-
 <h2 id="actions">Actions</h2>
 <h3 id="resize-image">Resize image</h3>
-<pre><code class="php">$tinyPng-&gt;fromFile('source.png')
-  -&gt;resize([
-    'method' =&gt; 'fit',
-    'width' =&gt; 50,
-  ])
-  -&gt;toFile('output.png');
-</code></pre>
+<pre><code class="language-php">$tinyPng = new \TinyPng\TinyPng(new \TinyPng\Client\GuzzleClient('your_api_key'));
+$output = $tinyPng-&gt;optimize(new \TinyPng\Input\Filesystem('unoptimized_image.png'));
 
+$output-&gt;setCommands(
+    new \TinyPng\Output\Command\Resize(
+        \TinyPng\Output\Command\Resize::METHOD_FIT,
+        50
+    )
+);
+$output-&gt;store(new \TinyPng\Output\Storage\Filesystem('output.png'));
+</code></pre>
 <h3 id="preserve-metadata">Preserve metadata</h3>
-<pre><code class="php">$tinyPng-&gt;fromFile('source.png')
-  -&gt;preserve(['copyright', 'creation', 'location'])
-  -&gt;toFile('output.png');
-</code></pre>
+<pre><code class="language-php">$tinyPng = new \TinyPng\TinyPng(new \TinyPng\Client\GuzzleClient('your_api_key'));
+$output = $tinyPng-&gt;optimize(new \TinyPng\Input\Filesystem('unoptimized_image.png'));
 
+$output-&gt;setCommands(
+    new \TinyPng\Output\Command\Metadata(
+        \TinyPng\Output\Command\Metadata::METADATA_COPYRIGHT,
+        \TinyPng\Output\Command\Metadata::METADATA_CREATION,
+        \TinyPng\Output\Command\Metadata::METADATA_LOCATION,
+    )
+);
+$output-&gt;store(new \TinyPng\Output\Storage\Filesystem('output.png'));
+</code></pre>
 <hr />
 <h3 id="save-to-amazon-s3">Save to Amazon S3</h3>
-<pre><code class="php">$tinyPng-&gt;fromFile('source.png')
-  -&gt;saveToAmazonS3([
+<pre><code class="language-php">$tinyPng = new \TinyPng\TinyPng(new \TinyPng\Client\GuzzleClient('your_api_key'));
+$output = $tinyPng-&gt;optimize(new \TinyPng\Input\Filesystem('unoptimized_image.png'));
+$output-&gt;store(new \TinyPng\Output\Storage\AmazonS3([
     'aws_access_key_id' =&gt; '',
     'aws_secret_access_key' =&gt; '',
     'region' =&gt; '',
     'path' =&gt; 'bucket/path/filename'
-  ]);
+]));
 </code></pre>
-
-<h3 id="get-optimised-result">Get optimised result</h3>
-<pre><code>$image = $tinyPng-&gt;fromFile('source.png')-&gt;getImage();
-
-$stream = $image-&gt;getDataStream(); // \Psr\Http\Message\StreamInterface
-$metada = $image-&gt;getMetadata();   // \TinyPng\Image\Metadata
-</code></pre>
-
 <p>For more detailed explanation please refer to <a href="https://tinypng.com/developers/reference">official documentation</a></p>
               
             </div>
@@ -192,7 +185,7 @@ $metada = $image-&gt;getMetadata();   // \TinyPng\Image\Metadata
     
   </div>
 
-  Built with <a href="http://www.mkdocs.org">MkDocs</a> using a <a href="https://github.com/snide/sphinx_rtd_theme">theme</a> provided by <a href="https://readthedocs.org">Read the Docs</a>.
+  Built with <a href="https://www.mkdocs.org/">MkDocs</a> using a <a href="https://github.com/snide/sphinx_rtd_theme">theme</a> provided by <a href="https://readthedocs.org">Read the Docs</a>.
 </footer>
       
         </div>
@@ -202,7 +195,7 @@ $metada = $image-&gt;getMetadata();   // \TinyPng\Image\Metadata
 
   </div>
 
-  <div class="rst-versions" role="note" style="cursor: pointer">
+  <div class="rst-versions" role="note" aria-label="versions">
     <span class="rst-current-version" data-toggle="rst-current-version">
       
           <a href="https://github.com/robopuff/tinypng/" class="fa fa-github" style="float: left; color: #fcfcfc"> GitHub</a>
@@ -216,6 +209,11 @@ $metada = $image-&gt;getMetadata();   // \TinyPng\Image\Metadata
     <script>var base_url = '..';</script>
     <script src="../js/theme.js" defer></script>
       <script src="../search/main.js" defer></script>
+    <script defer>
+        window.onload = function () {
+            SphinxRtdTheme.Navigation.enable(true);
+        };
+    </script>
 
 </body>
 </html>
