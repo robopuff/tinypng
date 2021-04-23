@@ -16,9 +16,6 @@ matrix:
   - php: 7.4
     env:
     - DEPS=locked
-  - php: 7.4
-    env:
-    - DEPS=latest
   - php: 8.0
     env:
       - DEPS=locked
