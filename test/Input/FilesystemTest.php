@@ -28,15 +28,4 @@ class FilesystemTest extends TestCase
         $this->expectExceptionCode(404);
         $fs->getBuffer();
     }
-
-    public function testExceptionIsThrownWhenFailedToOpenResource()
-    {
-        $tmpf = tempnam(sys_get_temp_dir(), 'tinypng-php');
-        chmod($tmpf, 0);
-        $fs = new Filesystem($tmpf);
-        $this->expectException(FilesystemException::class);
-        $this->expectExceptionCode(500);
-        $this->expectExceptionMessage('Cannot create resource');
-        $fs->getBuffer();
-    }
 }
